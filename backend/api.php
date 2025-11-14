@@ -8,7 +8,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Inclui o arquivo de conexão (que usa PDO e PostgreSQL)
+// Inclui o arquivo de conexão (que usa PDO e MySQL)
 include_once 'dbconfig.php';
 
 // Trata o preflight OPTIONS (necessário para CORS)

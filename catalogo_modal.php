@@ -1,5 +1,5 @@
 <?php
-// catalogo.php
+
 /**
  * Busca a lista de filmes da API RESTful, trata a resposta e ordena os filmes.
  * @param string $api_url URL completa do endpoint da API.
@@ -86,7 +86,10 @@ $error = $result['error'];
     <main>
         <h2>Catálogo de filmes</h2>
         <p>Desfrute desse catálogo imenso de filmes extradionários</p>
-        <a href="filme_form.php"><button type="button">Cadastrar Novo Filme</button></a>
+        
+        <!-- Botão para adicionar novo filme -->
+        <button id="btn-adicionar-filme" class="btn-adicionar">+ Adicionar Novo Filme</button>
+        
         <table border="1" id="tabela-catalogo">
             <thead>
                 <tr>
@@ -94,13 +97,14 @@ $error = $result['error'];
                     <th>Título</th>
                     <th>Gênero</th>
                     <th>Código</th>
-                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody id="corpo-tabela-filmes">
                 <?php if ($error): ?>
+                    <!-- Exibe mensagem de erro -->
                     <tr style="color: red; border: 1px solid red; padding: 10px;">
-                        <td colspan="5"><p><?php echo htmlspecialchars($error); ?></p></td>
+                        <td colspan="3">Erro</td>
+                        <td colspan="3"><p><?php echo htmlspecialchars($error); ?></p></td>
                     </tr>
                 <?php elseif (!empty($filmes)): ?>
                     <?php foreach ($filmes as $filme): ?>
@@ -110,46 +114,67 @@ $error = $result['error'];
                                     $url = htmlspecialchars($filme['cartaz'] ?? '');
                                     if (!empty($url)):
                                 ?>
+                                    <!-- CORREÇÃO 3: Exibe a URL como uma imagem <img> -->
                                     <img src="<?php echo $url; ?>" 
-                                        alt="<?php echo htmlspecialchars($filme['titulo'] ?? 'Cartaz'); ?>" />
+                                        alt="<?php echo htmlspecialchars($filme['titulo'] ?? 'Cartaz'); ?>"
+                                    />
+                                    <!-- Fallback para caso a imagem não carregue -->
+                                    <span style="display: none; color: gray;">Imagem não carregada.</span>
                                 <?php else: ?>
                                     N/A
                                 <?php endif; ?>
                             </td>
-
-                            <td><?php echo htmlspecialchars($filme['titulo']); ?></td>
-                            <td><?php echo htmlspecialchars($filme['genero']); ?></td>
-                            <td><?php echo htmlspecialchars($filme['id']); ?></td>
-
-                            <!-- NOVA COLUNA -->
-                            <td>
-                                <!-- Botão Editar -->
-                                <button 
-                                    style="background-color: #d4a017; width: 100%; margin-bottom: 5px;"
-                                    onclick="window.location.href='filme_form.php?action=editar&id=<?php echo $filme['id']; ?>&titulo=<?php echo urlencode($filme['titulo']); ?>&genero=<?php echo urlencode($filme['genero']); ?>&cartaz=<?php echo urlencode($filme['cartaz']); ?>'">
-                                    Editar
-                                </button>
-
-                                <!-- Botão Deletar -->
-                                <button
-                                    style="background-color: #b30000; width: 100%;"
-                                    onclick="deleteFilme(<?php echo $filme['id']; ?>)">
-                                    Deletar
-                                </button>
-                            </td>
+                            <td><?php echo htmlspecialchars($filme['titulo'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($filme['genero'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($filme['id'] ?? ''); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="5">Não foi possível carregar o catálogo.</td>
+                        <td colspan="5">Não foi possível carregar o catálogo de filmes. Verifique a URL da API.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
     </main>
+
+    <!-- Modal para adicionar novo filme -->
+    <div id="modal-filme" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Adicionar Novo Filme</h3>
+            <form id="form-novo-filme" method="POST" action="backend/api.php?resource=filmes">
+                <div class="form-group">
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" name="titulo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="genero">Gênero:</label>
+                    <input type="text" id="genero" name="genero" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cartaz">URL do Cartaz:</label>
+                    <input type="url" id="cartaz" name="cartaz" placeholder="https://exemplo.com/imagem.jpg">
+                </div>
+                
+                <div class="form-group">
+                    <label for="descricao">Descrição:</label>
+                    <textarea id="descricao" name="descricao" rows="4"></textarea>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn-salvar">Salvar Filme</button>
+                    <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <?php include 'footer.php'; ?>
     <script src="js/tema.js"></script>
-    <script src="js/deletar_filme.js"></script>
+    <script src="js/catalogo.js"></script>
 </body>
 
 </html>

@@ -1,4 +1,6 @@
 <?php
+// routes.php
+// Roteamento principal para a API RESTful baseada em Query String.
 
 $response = array();
 

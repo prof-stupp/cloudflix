@@ -94,13 +94,14 @@ $error = $result['error'];
                     <th>Título</th>
                     <th>Gênero</th>
                     <th>Código</th>
-                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody id="corpo-tabela-filmes">
                 <?php if ($error): ?>
+                    <!-- Exibe mensagem de erro -->
                     <tr style="color: red; border: 1px solid red; padding: 10px;">
-                        <td colspan="5"><p><?php echo htmlspecialchars($error); ?></p></td>
+                        <td colspan="3">Erro</td>
+                        <td colspan="3"><p><?php echo htmlspecialchars($error); ?></p></td>
                     </tr>
                 <?php elseif (!empty($filmes)): ?>
                     <?php foreach ($filmes as $filme): ?>
@@ -110,38 +111,24 @@ $error = $result['error'];
                                     $url = htmlspecialchars($filme['cartaz'] ?? '');
                                     if (!empty($url)):
                                 ?>
+                                    <!-- CORREÇÃO 3: Exibe a URL como uma imagem <img> -->
                                     <img src="<?php echo $url; ?>" 
-                                        alt="<?php echo htmlspecialchars($filme['titulo'] ?? 'Cartaz'); ?>" />
+                                        alt="<?php echo htmlspecialchars($filme['titulo'] ?? 'Cartaz'); ?>"
+                                    />
+                                    <!-- Fallback para caso a imagem não carregue -->
+                                    <span style="display: none; color: gray;">Imagem não carregada.</span>
                                 <?php else: ?>
                                     N/A
                                 <?php endif; ?>
                             </td>
-
-                            <td><?php echo htmlspecialchars($filme['titulo']); ?></td>
-                            <td><?php echo htmlspecialchars($filme['genero']); ?></td>
-                            <td><?php echo htmlspecialchars($filme['id']); ?></td>
-
-                            <!-- NOVA COLUNA -->
-                            <td>
-                                <!-- Botão Editar -->
-                                <button 
-                                    style="background-color: #d4a017; width: 100%; margin-bottom: 5px;"
-                                    onclick="window.location.href='filme_form.php?action=editar&id=<?php echo $filme['id']; ?>&titulo=<?php echo urlencode($filme['titulo']); ?>&genero=<?php echo urlencode($filme['genero']); ?>&cartaz=<?php echo urlencode($filme['cartaz']); ?>'">
-                                    Editar
-                                </button>
-
-                                <!-- Botão Deletar -->
-                                <button
-                                    style="background-color: #b30000; width: 100%;"
-                                    onclick="deleteFilme(<?php echo $filme['id']; ?>)">
-                                    Deletar
-                                </button>
-                            </td>
+                            <td><?php echo htmlspecialchars($filme['titulo'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($filme['genero'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($filme['id'] ?? ''); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="5">Não foi possível carregar o catálogo.</td>
+                        <td colspan="5">Não foi possível carregar o catálogo de filmes. Verifique a URL da API.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -149,7 +136,6 @@ $error = $result['error'];
     </main>
     <?php include 'footer.php'; ?>
     <script src="js/tema.js"></script>
-    <script src="js/deletar_filme.js"></script>
 </body>
 
 </html>

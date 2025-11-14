@@ -9,7 +9,7 @@ define('DB_HOST', '127.0.0.1'); // Use 'localhost' ou '127.0.0.1'
 define('DB_PORT', 3306); 
 define('DB_NAME', 'cloudflix'); // Seu novo banco de dados
 define('DB_USER', 'root');
-define('DB_PASS', ''); // A senha definida no docker run
+define('DB_PASS', 'mysql123'); // A senha definida no docker run
 
 /**
  * Função para estabelecer a conexão com o banco de dados MySQL via PDO.
@@ -28,6 +28,7 @@ function getDbConnection() {
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Lança exceções em caso de erro
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Retorna resultados como array associativo
         PDO::ATTR_EMULATE_PREPARES   => false,                  // Melhor segurança e performance
+        PDO::ATTR_TIMEOUT => 120,
     ];
 
     try {
