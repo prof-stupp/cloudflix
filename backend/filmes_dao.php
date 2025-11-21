@@ -54,7 +54,7 @@ function readFilmes($pdo, $id) {
         }
     } else {
         // READ ALL
-        $sql = "SELECT id, titulo, genero, cartaz FROM filmes ORDER BY id DESC";
+        $sql = "SELECT id, titulo, genero, cartaz FROM filmes";
         $stmt = $pdo->query($sql);
         $filmes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

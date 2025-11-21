@@ -34,11 +34,6 @@ function fetchFilmesFromApi(string $api_url): array {
         if ($http_code === 200) {
             if (is_array($data) && count($data) > 0 && isset($data[0]['id'])) {
                 $filmes = $data;
-                
-                // Ordenação local dos filmes em ordem crescente por 'id'.
-                usort($filmes, function($a, $b) {
-                    return $a['id'] <=> $b['id'];
-                });
 
             } elseif (is_array($data) && empty($data)) {
                 $error = "Nenhum filme cadastrado na base de dados.";
